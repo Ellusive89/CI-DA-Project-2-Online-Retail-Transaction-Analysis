@@ -1,75 +1,113 @@
-# ![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Retail: Online Retail Transaction Analysis (ORTA)
 
-## Template Instructions
+## Project overview
 
-Welcome,
+Retail: ORTA is an online retail data analytics project designed to help sales and marketing teams understand customer behaviour, product performance, geographic markets, cancellations, and sales trends.
 
-This is the Code Institute student template for the three Data Analytics capstone projects. We have preinstalled all of the tools you need to get started. It's perfectly okay to use this template as the basis for your project submissions. Click the `Use this template` button above to get started.
+The project uses historical transaction data from a UK-based online retailer. The analysis will be completed in Jupyter Notebooks and presented through an interactive Streamlit dashboard.
 
-You can safely delete the Template Instructions section of this README.md file and modify the remaining paragraphs for your own project. Please do read the Template Instructions at least once, though! It contains some important information about the IDE and the extensions we use.
+The finished application will help retail decision-makers identify valuable customer groups, popular products, important markets, and potential marketing opportunities.
 
-If you are working on the first capstone project, you can also delete `.python-version`, `.slugignore`, `Procfile` and `setup.sh` as they are only required for later dashboard projects. 
+## Table of contents
 
-## How to use this repo
+- [Business problem](#business-problem)
+- [Project rationale](#project-rationale)
+- [Target audience](#target-audience)
+- [Business requirements](#business-requirements)
+- [Dataset](#dataset)
+- [Data analysis objectives](#data-analysis-objectives)
 
-1. Use this template to create your GitHub project repo. Click the **Use this template** button, then click **Create a new repository**.
+## Business problem
 
-1. Copy the URL of your repository to your clipboard.
+Online retailers collect large volumes of transaction data, but raw transaction records do not directly explain:
 
-1. In VS Code, select **File** -> **Open Folder**.
+- which customers are most valuable;
+- which products generate the most sales;
+- how revenue changes over time;
+- which countries represent important markets;
+- how cancellations affect business performance;
+- which customer groups should receive different marketing treatments.
 
-1. Select your `vscode-projects` folder, then click the **Select Folder** button on Windows, or the **Open** button on Mac.
+Retail: ORTA will transform the raw transaction data into understandable business insights and interactive decision-support tools.
 
-1. From the top menu in VS Code, select **Terminal** > **New Terminal** to open a new terminal.
+## Project rationale
 
-1. In the terminal, type `git clone` followed by the URL of your GitHub repository. Then hit **Enter**. This command will download all the files in your GitHub repository into your vscode-projects folder.
+The project addresses a realistic retail analytics problem. Sales and marketing teams need reliable information to plan campaigns, prioritise customers, understand demand, and evaluate product performance.
 
-1. In VS Code, select **File** > **Open Folder** again.
+The project will combine descriptive statistics, probability, hypothesis testing, exploratory analysis, machine learning, and interactive visualisation. This provides both analytical evidence and a practical tool for a real-world audience.
 
-1. This time, navigate to and select the folder for the project you just downloaded. Then, click **Select Folder**.
+The project will not describe revenue as profit because the dataset does not contain product cost, fulfilment cost, marketing cost, or operating expenses.
 
-1. A virtual environment is necessary when working with Python projects to ensure each project's dependencies are kept separate. You need to create your virtual environment, also called a venv, and then activate it whenever you return to your workspace.
-Click the gear icon in the lower left-hand corner of the screen to open the Manage menu and select **Command Palette** to open the VS Code command palette.
+## Target audience
 
-1. In the command palette, type: *create environment* and select **Python: Create Environment…**
+The primary users are:
 
-1. Choose **Venv** from the dropdown list.
+- e-commerce sales managers;
+- marketing managers;
+- customer relationship managers;
+- product and pricing teams.
 
-1. Choose the Python version you installed earlier. Currently, we recommend Python 3.12.8
+Users are expected to understand retail performance but should not need technical knowledge of Python or machine learning.
 
-1. **DO NOT** click the box next to `requirements.txt`; you need to complete additional steps before installing your dependencies. Click **OK**.
+## Business requirements
 
-1. You will see a `.venv` folder appear in the file explorer pane, indicating that the virtual environment has been created.
+The project will answer the following business questions:
 
-1. **Important**: Note that the `.venv` folder is in the `.gitignore` file so that Git won't track it.
+1. What is the total completed sales revenue?
+2. How does revenue change over time?
+3. What is the average completed transaction value?
+4. Which products generate the most revenue?
+5. Which products sell the greatest number of units?
+6. Which geographic markets generate the most revenue?
+7. How many invoices are cancellations?
+8. What customer groups can be identified from purchasing behaviour?
+9. How do the identified customer groups differ?
+10. Which products and marketing treatments may be appropriate for each group?
+11. How could different campaign assumptions affect estimated revenue?
 
-1. Return to the terminal by clicking on the TERMINAL tab, or click on the **Terminal** menu and choose **New Terminal** if no terminal is currently open.
+## Dataset
 
-1. In the terminal, use the command below to install your dependencies. This may take several minutes.
+The project uses the Online Retail Transactions dataset.
 
- ```console
- pip3 install -r requirements.txt
- ```
+Kaggle source:
 
-1. Open the `jupyter_notebooks` directory, and click on the notebook you want to open.
+https://www.kaggle.com/datasets/abhishekrp1517/online-retail-transactions-dataset
 
-1. Click the **Kernel** button, then choose **Python Environments**.
 
-Note that the kernel says `Python 3.12.8` as it inherits from the venv, so it will be Python-3.12.8 if that is what is installed on your PC. To confirm this, you can use the command below in a notebook code cell.
+The dataset contains transactions from a UK-based non-store retailer between December 2010 and December 2011.
 
-```console
-! python --version
-```
+The principal fields are:
 
-## Deployment Reminders
+| Field | Description |
+|---|---|
+| `InvoiceNo` | Identifier assigned to an invoice |
+| `StockCode` | Product identifier |
+| `Description` | Product description |
+| `Quantity` | Number of product units |
+| `InvoiceDate` | Date and time of the transaction |
+| `UnitPrice` | Price per unit in pounds sterling |
+| `CustomerID` | Customer identifier |
+| `Country` | Customer country |
 
-* The `.python-version`, `.slugignore`, `Procfile` and `setup.sh` files are necessary only if you are deploying a Streamlit app to Heroku as part of your submission for units 2 and 3. 
-* Set the `.python-version` Python version to a [Heroku-22](https://devcenter.heroku.com/articles/python-support#supported-runtimes) stack, currently supported version that most closely matches what you used in this project.
-* The project can be deployed to Heroku using the following steps.
+Invoice numbers beginning with `C` represent cancellations.
 
-1. Log in to Heroku and create an App
-2. At the **Deploy** tab, select **GitHub** as the deployment method.
-3. Select your repository name and click **Search**. Once it is found, click **Connect**.
-4. Select the branch you want to deploy, then click **Deploy Branch**.
-5. The deployment process should happen smoothly if all deployment files are fully functional. Click the button **Open App** at the top of the page to access your App.
-6. If the slug size is too large, then add large files not required for the app to the `.slugignore` file.
+The dataset does not contain product cost, product category, customer demographics, marketing-channel information, or profit.
+
+## Data analysis objectives
+
+The analysis will:
+
+- inspect the structure and quality of the raw data;
+- identify missing values, duplicates, cancellations, and unusual values;
+- create a reproducible ETL pipeline;
+- calculate line revenue using quantity multiplied by unit price;
+- separate completed sales from cancellations and returns;
+- calculate descriptive statistics;
+- calculate relevant empirical probabilities;
+- investigate sales trends over time;
+- compare product and geographic performance;
+- test business hypotheses;
+- create customer-level RFM features;
+- apply customer-segmentation machine learning;
+- communicate findings through interactive Plotly charts;
+- provide actionable but appropriately qualified recommendations.
