@@ -16,6 +16,8 @@ The finished application will help retail decision-makers identify valuable cust
 - [Business requirements](#business-requirements)
 - [Dataset](#dataset)
 - [Data analysis objectives](#data-analysis-objectives)
+- [Planned hypotheses](#planned-hypotheses)
+- [Machine learning objective](#machine-learning-objective)
 
 ## Business problem
 
@@ -111,3 +113,57 @@ The analysis will:
 - apply customer-segmentation machine learning;
 - communicate findings through interactive Plotly charts;
 - provide actionable but appropriately qualified recommendations.
+
+## Planned hypotheses
+
+### Hypothesis 1: Geographic order value
+
+**Null hypothesis — H0**
+
+The mean customer order value is the same for UK and non-UK customers.
+
+**Alternative hypothesis — H1**
+
+The mean customer order value differs between UK and non-UK customers.
+
+The planned primary method is Welch's independent-samples t-test because the groups may have different sample sizes and variances.
+
+The analysis will also consider distributions, confidence intervals, effect size, and a non-parametric sensitivity test.
+
+### Hypothesis 2: Quantity and unit price
+
+**Null hypothesis — H0**
+
+There is no monotonic relationship between product quantity and unit price.
+
+**Alternative hypothesis — H1**
+
+There is a monotonic relationship between product quantity and unit price.
+
+The planned method is Spearman rank correlation because retail quantity and price data may contain outliers and may not follow normal distributions.
+
+Statistical significance will not automatically be treated as commercial importance. Effect sizes, data quality, assumptions, and business relevance will also be considered.
+
+## Machine learning objective
+
+The machine learning objective is to identify meaningful customer groups using RFM features:
+
+- **Recency:** days since the customer's latest purchase;
+- **Frequency:** number of completed invoices;
+- **Monetary:** total completed revenue associated with the customer.
+
+The project will use K-Means clustering from Scikit-learn.
+
+K-Means is appropriate because the dataset does not provide a known customer segment target. This makes customer segmentation an unsupervised learning problem rather than a supervised classification problem.
+
+The RFM features will be transformed and standardised so that features with large numerical values do not dominate the clustering calculation.
+
+Several possible cluster counts will be evaluated using methods such as:
+
+- inertia;
+- silhouette score;
+- cluster size;
+- cluster interpretability;
+- business usefulness.
+
+Alternative methods such as hierarchical clustering and DBSCAN will be discussed as possible future approaches.
