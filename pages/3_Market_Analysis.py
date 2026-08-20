@@ -569,4 +569,3 @@ with st.expander("Market-analysis scope and limitations"):
         - December 2011 is incomplete because the dataset ends on 9 December.
         """
     )
-    
