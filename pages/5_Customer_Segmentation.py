@@ -7,12 +7,6 @@ import streamlit as st
 from src.data_loader import load_customer_segments
 
 
-st.set_page_config(
-    page_title="Customer Segmentation",
-    page_icon="👥",
-    layout="wide",
-)
-
 PLOTLY_CONFIG = {
     "displaylogo": False,
     "scrollZoom": False,

@@ -11,12 +11,6 @@ from src.data_loader import (
 )
 
 
-st.set_page_config(
-    page_title="Cancellation Analysis",
-    page_icon="↩️",
-    layout="wide",
-)
-
 PLOTLY_CONFIG = {
     "displaylogo": False,
     "scrollZoom": False,

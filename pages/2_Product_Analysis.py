@@ -7,12 +7,6 @@ import streamlit as st
 from src.data_loader import load_completed_sales
 
 
-st.set_page_config(
-    page_title="Product Analysis",
-    page_icon="📦",
-    layout="wide",
-)
-
 PLOTLY_CONFIG = {
     "displaylogo": False,
     "scrollZoom": False,
