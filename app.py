@@ -163,8 +163,8 @@ with st.expander("Data scope and important limitations"):
         - Customer identifier `15287` appears to combine transactions belonging
           to unknown customers. Its valid transactions remain in general sales
           analysis, but it is excluded from customer segmentation.
-        - The data contains revenue rather than profit, so high revenue does not
-          necessarily mean high profitability.
+        - The data contains revenue rather than profit, so high revenue does
+          not necessarily mean high profitability.
         - Statistical associations do not by themselves demonstrate causation.
         """
     )
