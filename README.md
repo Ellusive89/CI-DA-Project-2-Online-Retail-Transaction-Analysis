@@ -965,6 +965,7 @@ The following functional tests verify the behaviour of the complete Streamlit ap
 | Sidebar layout | Expand and collapse the sidebar | Sidebar remains usable and page content remains readable |  Pass |
 | Responsive layout | Reduce the browser width | Content remains readable without major overlap |  Pass |
 | External links | Select an external link | Correct resource opens in a separate browser tab |  Pass |
+| Live deployment | Open the Heroku application and visit every page | Every page loads without an exception | Pass |
 
 ### Page-by-page testing
 
