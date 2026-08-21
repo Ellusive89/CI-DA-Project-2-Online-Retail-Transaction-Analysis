@@ -8,6 +8,12 @@ The project uses historical transaction data from a UK-based online retailer. Th
 
 The application helps retail decision-makers identify valuable customer groups, popular products, important markets, cancellation patterns, and potential marketing opportunities.
 
+**Live application:**  
+[Launch the Online Retail Transaction Analysis dashboard](https://ewa-ci-online-retail-analysis-ca5f9bbb68ba.herokuapp.com/)
+
+**GitHub repository:**  
+[View the project source code](https://github.com/Ellusive89/CI-DA-Project-2-Online-Retail-Transaction-Analysis)
+
 ## Table of contents
 
 - [Project overview](#project-overview)
@@ -28,6 +34,10 @@ The application helps retail decision-makers identify valuable customer groups, 
 - [Technologies used](#technologies-used)
 - [Local installation](#local-installation)
 - [Testing](#testing)
+- [Deployment](#deployment)
+- [Limitations and future development](#limitations-and-future-development)
+- [Learning reflection](#learning-reflection)
+- [Learning outcome mapping](#learning-outcome-mapping)
 - [Credits and references](#credits-and-references)
 - [Acknowledgements](#acknowledgements)
 
@@ -685,7 +695,7 @@ only way information is communicated.
 ### Visualisation and application
 
 - **Plotly** — interactive charts with zoom, hover, selection, and export controls.
-- **Matplotlib and Seaborn** — supporting notebook visualisations.
+- **Plotly** — interactive notebook and dashboard visualisations.
 - **Streamlit** — interactive multipage business dashboard.
 - **HTML and Markdown** — application and project documentation.
 
@@ -694,25 +704,113 @@ only way information is communicated.
 - **Visual Studio Code** — project development environment.
 - **Git** — version control.
 - **GitHub** — remote repository and project hosting.
-- **Heroku** — planned deployment platform.
+- **Heroku** — deployment platform for the live Streamlit application.
 
 ## Local installation
 
-Follow these instructions to run the project locally.
+Follow these instructions to run the notebooks and Streamlit dashboard locally.
 
 ### Requirements
 
 - Python 3.12
 - Git
+- Visual Studio Code
+- Python extension for Visual Studio Code
+- Jupyter extension for Visual Studio Code
 - A terminal or command-line application
 
-### Installation
-
-Clone the GitHub repository:
+### Clone the repository
 
 ```bash
 git clone https://github.com/Ellusive89/CI-DA-Project-2-Online-Retail-Transaction-Analysis.git
 ```
+
+Enter the project directory:
+
+```bash
+cd CI-DA-Project-2-Online-Retail-Transaction-Analysis
+```
+
+### Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+Activate it on macOS or Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+On Windows PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+### Install dependencies
+
+For the Streamlit application only:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+For the application and Jupyter notebooks:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements-dev.txt
+```
+
+Validate the environment:
+
+```bash
+python -m pip check
+```
+
+Expected result:
+
+```text
+No broken requirements found.
+```
+
+### Run the notebooks
+
+In Visual Studio Code, select the Python interpreter from `.venv`.
+
+Run the notebooks in this order:
+
+1. `jupyter_notebooks/01_ETL_Data_Cleaning.ipynb`
+2. `jupyter_notebooks/02_Exploratory_Data_Analysis.ipynb`
+3. `jupyter_notebooks/03_Statistical_Analysis.ipynb`
+4. `jupyter_notebooks/04_Customer_Segmentation.ipynb`
+
+The ETL notebook must run before the later notebooks because it creates the processed Parquet datasets.
+
+The segmentation notebook creates:
+
+```text
+data/processed/customer_segments.parquet
+```
+
+### Run the Streamlit application
+
+From the project root:
+
+```bash
+python -m streamlit run app.py
+```
+
+Streamlit should display a local address similar to:
+
+```text
+http://localhost:8501
+```
+
+Open the address in a browser. Stop the application with `Control + C`.
 
 ## Testing
 
