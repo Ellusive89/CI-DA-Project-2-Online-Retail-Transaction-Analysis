@@ -28,6 +28,8 @@ The application helps retail decision-makers identify valuable customer groups, 
 - [Technologies used](#technologies-used)
 - [Local installation](#local-installation)
 - [Testing](#testing)
+- [Credits and references](#credits-and-references)
+- [Acknowledgements](#acknowledgements)
 
 ## Business problem
 
@@ -1052,3 +1054,133 @@ The automated checks confirm that the project dependencies, Python syntax, data 
 
 Manual testing is used to verify the interactive filters, dashboard pages, charts, scenario controls, downloads, navigation, responsive layout, browser
 compatibility, and user feedback.
+
+## Credits and references
+
+The following educational materials, datasets, libraries, documentation, and development tools supported the completion of this project.
+
+### Educational resources
+
+- [Code Institute](https://codeinstitute.net/) — course materials, project guidance, data analytics concepts, and examples used throughout the learning
+programme.
+- Code Institute Learning Management System materials — guidance relating to Python, Pandas, data cleaning, exploratory data analysis, statistics, machine
+learning, Streamlit, Git, GitHub, documentation, and deployment.
+- Code Institute assessment criteria — used to structure the project and confirm coverage of Learning Outcomes LO1–LO4.
+
+### Dataset
+
+- [Online Retail Transactions Dataset on Kaggle](https://www.kaggle.com/datasets/abhishekrp1517/online-retail-transactions-dataset) — the raw transaction   dataset used in this project.
+- [Kaggle documentation](https://www.kaggle.com/docs) — general information about Kaggle datasets and platform use.
+
+The raw CSV was retained unchanged in `data/raw/online_retail.csv`. Cleaning, feature engineering, analytical exclusions, and processed-data exports are
+documented in the ETL notebook.
+
+### Python and data-analysis libraries
+
+- [Python documentation](https://docs.python.org/3/) — Python language, standard-library, environment, and module guidance.
+- [Pandas documentation](https://pandas.pydata.org/docs/) — DataFrame creation, cleaning, filtering, grouping, aggregation, datetime handling, and file input
+and output.
+- [NumPy documentation](https://numpy.org/doc/stable/) — numerical operations, Boolean selection, array handling, and feature calculations.
+- [SciPy documentation](https://docs.scipy.org/doc/scipy/) — statistical hypothesis tests and correlation analysis.
+- [Scikit-learn documentation](https://scikit-learn.org/stable/) — data preprocessing, `StandardScaler`, K-Means clustering, silhouette evaluation,
+and machine-learning methodology.
+- [PyArrow documentation](https://arrow.apache.org/docs/python/) — reading and writing the processed Parquet datasets.
+
+### Visualisation and application libraries
+
+- [Plotly Python documentation](https://plotly.com/python/) — interactive line charts, bar charts, histograms, scatter plots, geographic charts, hover
+information, and chart configuration.
+- [Streamlit documentation](https://docs.streamlit.io/) — multipage application structure, navigation, sidebar filters, metric components, caching, data
+tables, Plotly integration, and download controls.
+- [Matplotlib documentation](https://matplotlib.org/stable/) — supporting notebook visualisations and chart configuration.
+- [Seaborn documentation](https://seaborn.pydata.org/) — statistical visualisation guidance and supporting notebook charts.
+- [Project Jupyter documentation](https://docs.jupyter.org/en/latest/) — notebook creation, execution, markdown documentation, and analytical workflow.
+
+### Statistical and machine-learning references
+
+The project applied the following statistical and machine-learning concepts:
+
+- mean, median, variance, and standard deviation;
+- empirical probability;
+- distribution shape and outlier analysis;
+- null and alternative hypotheses;
+- significance levels and p-values;
+- Welch's independent-samples t-test;
+- Spearman rank correlation;
+- effect size;
+- log transformation;
+- RFM customer features;
+- feature scaling;
+- K-Means clustering;
+- inertia and elbow analysis;
+- silhouette-score evaluation.
+
+The practical implementation of these methods was supported by the official [SciPy](https://docs.scipy.org/doc/scipy/) and
+[Scikit-learn](https://scikit-learn.org/stable/) documentation. Method choices, assumptions, results, business interpretations, and limitations are documented inside the statistical-analysis and customer-segmentation notebooks.
+
+### Development and version-control documentation
+
+- [Git documentation](https://git-scm.com/doc) — version control, staging, commits, branches, and remote repositories.
+- [GitHub documentation](https://docs.github.com/) — repository hosting, remote collaboration, Markdown, and project documentation.
+- [Visual Studio Code documentation](https://code.visualstudio.com/docs) — editor, terminal, Python, Jupyter Notebook, and extension guidance.
+
+### Deployment documentation
+
+- [Heroku Python documentation](https://devcenter.heroku.com/categories/python-support)
+  — Python application deployment and platform behaviour.
+- [Heroku Python runtime documentation](https://devcenter.heroku.com/articles/python-runtimes)
+  — selection of the deployed Python version through `.python-version`.
+- [Heroku Python dependency documentation](https://devcenter.heroku.com/articles/python-pip)
+  — installation of dependencies from `requirements.txt`.
+- [Heroku Git deployment documentation](https://devcenter.heroku.com/articles/git)
+  — creation and deployment of applications through Git and the Heroku CLI.
+- [Streamlit deployment documentation](https://docs.streamlit.io/deploy) —
+  deployment concepts and application configuration.
+
+### UX and accessibility references
+
+- [Web Content Accessibility Guidelines overview](https://www.w3.org/WAI/standards-guidelines/wcag/)
+  — guidance concerning readable content, keyboard accessibility, colour use, information hierarchy, and user interaction.
+- [Streamlit API reference](https://docs.streamlit.io/develop/api-reference)
+  — accessible native controls, page layout, user feedback, and interactive application components.
+- [Plotly accessibility documentation](https://plotly.com/python/accessibility/)
+  — accessibility considerations for interactive charts.
+
+### AI-assisted development resources
+
+The following AI tools were used as learning and development assistants:
+
+- [OpenAI Codex](https://openai.com/codex/)
+- [ChatGPT](https://chatgpt.com/overview/)
+- [GitHub Copilot](https://docs.github.com/en/copilot), integrated into Visual
+  Studio Code
+
+The AI tools assisted with:
+
+- explaining unfamiliar Python and data-analysis code;
+- breaking development work into manageable steps;
+- identifying and understanding error messages;
+- suggesting debugging and validation approaches;
+- improving analytical storytelling and business explanations;
+- organising the README and notebook documentation;
+- checking the project against the supplied assessment requirements;
+- reviewing UX and accessibility considerations;
+- proposing test cases;
+- double-checking commands, outputs, and expected dataset dimensions.
+
+AI-generated suggestions were reviewed, adapted, and tested before being included in the project. Statistical outputs and dataset findings were checked
+against executed notebook results. AI tools did not replace the project author's responsibility for analytical decisions, interpretation, testing, or
+the final submitted work.
+
+## Acknowledgements
+
+I would like to thank [Code Institute](https://codeinstitute.net/) for providing the learning materials, examples, project guidance, and support that made this project possible.
+
+A special thank you goes to **Marcel, my mentor**, for all his help, clear explanations, guidance, encouragement, and patience throughout the entire course. His support helped me better understand the analytical methods, resolve challenges, and continue progressing step by step.
+
+I would also like to acknowledge the assistance provided by **OpenAI Codex**, **ChatGPT**, and **GitHub Copilot in Visual Studio Code**. These tools were a
+valuable part of my learning process. They helped explain code, troubleshoot problems, improve the project's storytelling, organise the development process,
+keep track of the assessment requirements, and double-check that each project stage was functioning as expected.
+
+Finally, I would like to thank the developers and maintainers of Python, Pandas, NumPy, SciPy, Scikit-learn, Plotly, Streamlit, PyArrow, Matplotlib,
+Seaborn, Jupyter, Git, GitHub, and the wider open-source community. Their work provided the tools and documentation used to create this project.
