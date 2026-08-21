@@ -1,2 +1,4 @@
 jupyter_notebooks/*
 README.md
+data/raw/*
+assets/images/*
