@@ -211,3 +211,29 @@ with guide_column_two:
         conversion rates for each customer segment.
         """
     )
+
+st.divider()
+
+st.subheader("Project resources")
+
+repository_column, dataset_column = st.columns(2)
+
+with repository_column:
+    st.link_button(
+        "View the GitHub repository",
+        (
+            "https://github.com/Ellusive89/"
+            "CI-DA-Project-2-Online-Retail-Transaction-Analysis"
+        ),
+        use_container_width=True,
+    )
+
+with dataset_column:
+    st.link_button(
+        "View the source dataset on Kaggle",
+        (
+            "https://www.kaggle.com/datasets/"
+            "abhishekrp1517/online-retail-transactions-dataset"
+        ),
+        use_container_width=True,
+    )
