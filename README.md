@@ -1153,6 +1153,71 @@ The automated checks confirm that the project dependencies, Python syntax, data 
 Manual testing is used to verify the interactive filters, dashboard pages, charts, scenario controls, downloads, navigation, responsive layout, browser
 compatibility, and user feedback.
 
+## Deployment
+
+The live application is deployed on Heroku:
+
+[Launch the Online Retail Transaction Analysis dashboard](https://ewa-ci-online-retail-analysis-ca5f9bbb68ba.herokuapp.com/)
+
+### Deployment configuration
+
+The project uses:
+
+- `.python-version` to select Python 3.12;
+- `requirements.txt` to install production dependencies;
+- `Procfile` to define the Heroku web process;
+- `setup.sh` to configure Streamlit with Heroku's assigned port;
+- `.slugignore` to exclude files that the deployed application does not need;
+- committed Parquet datasets in `data/processed/`.
+
+The `Procfile` contains:
+
+```text
+web: sh setup.sh && streamlit run app.py
+```
+
+The raw CSV, notebooks, README, and documentation images are retained in the GitHub repository but excluded from the Heroku slug. The processed Parquet
+datasets remain included because the application needs them.
+
+### Deployment procedure
+
+1. Create a Heroku application.
+2. Select Python as the buildpack.
+3. Connect the Heroku application to the GitHub repository.
+4. Select the `main` branch.
+5. Deploy the branch.
+6. Allow Heroku to install `requirements.txt`.
+7. Open the application after the release completes.
+8. Review the Heroku logs for startup or runtime errors.
+9. Test every dashboard page on the deployed application.
+
+### Deployment verification
+
+The deployed application was smoke-tested after deployment.
+
+| Test | Result |
+|---|---|
+| Heroku application URL responds | Pass |
+| Project Overview loads | Pass |
+| Sales Overview loads | Pass |
+| Product Analysis loads | Pass |
+| Market Analysis loads | Pass |
+| Cancellation Analysis loads | Pass |
+| Customer Segmentation loads | Pass |
+| Marketing Campaign Planner loads | Pass |
+| Processed datasets load | Pass |
+| Dashboard KPIs appear | Pass |
+| Navigation labels and emojis appear | Pass |
+| No Streamlit exceptions appear | Pass |
+| Browser console contains no errors | Pass |
+
+The deployment was also checked for readable headings, filters, metric cards, business explanations, and downloadable data controls.
+
+### Redeployment
+
+After a new commit is pushed to GitHub, redeploy the `main` branch through the Heroku dashboard. If automatic deployment is enabled, Heroku deploys the new
+commit after it reaches `main`.
+
 ## Credits and references
 
 The following educational materials, datasets, libraries, documentation, and development tools supported the completion of this project.
