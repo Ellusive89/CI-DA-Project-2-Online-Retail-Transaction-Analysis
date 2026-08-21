@@ -1218,6 +1218,95 @@ The deployment was also checked for readable headings, filters, metric cards, bu
 After a new commit is pushed to GitHub, redeploy the `main` branch through the Heroku dashboard. If automatic deployment is enabled, Heroku deploys the new
 commit after it reaches `main`.
 
+## Limitations and future development
+
+### Data limitations
+
+- The dataset covers one retailer between December 2010 and December 2011.
+- December 2011 is incomplete because the data ends on 9 December.
+- The data does not contain product costs, profit, product categories, demographics, marketing channels, campaign responses, or cancellation reasons.
+- Revenue must not be interpreted as profit.
+- Customer identifier `15287` appears to combine transactions from unknown customers. It is excluded from customer segmentation but retained for general sales analysis.
+- Unusually large bulk invoices can strongly influence product and market rankings.
+
+### Analytical limitations
+
+- Historical associations do not prove causation.
+- The price-and-volume relationship must not be interpreted as price elasticity.
+- Welch's t-test assumes independent observations, but customers can place multiple invoices.
+- K-Means favours compact clusters and depends on scaling, transformations, selected features, model initialisation, and cluster count.
+- Four clusters were selected for business usefulness even though two clusters produced a higher silhouette score.
+- Customer segments describe historical behaviour and are not predictions of future purchases.
+
+### Application limitations
+
+- The dashboard uses a static historical snapshot rather than live transaction data.
+- The application does not include authentication or role-based access.
+- The campaign planner uses user-supplied assumptions and is not a predictive forecasting model.
+- Campaign results cannot estimate true profit without reliable product-margin and campaign-cost information.
+
+### Future development
+
+Possible improvements include:
+
+- connecting the dashboard to a live retail database;
+- scheduling the ETL pipeline;
+- adding authenticated user roles;
+- incorporating product-category and profit-margin data;
+- recording cancellation reasons;
+- measuring campaign responses and customer retention;
+- building a supervised campaign-response model when labelled data becomes available;
+- adding A/B testing for marketing actions;
+- monitoring customer-segment changes over time;
+- adding automated regression tests;
+- comparing K-Means with hierarchical clustering or DBSCAN;
+- adding sales forecasting after obtaining complete and more recent time-series data.
+
+## Learning reflection
+
+This project developed my ability to plan and complete an independent analytics project from raw data through to a deployed decision-support application.
+
+Investigating customer identifier `15287` was an important challenge. Its unusually high frequency could have distorted the customer analysis. Rather
+than deleting its transactions from every analysis, I learned to apply purpose-specific rules: the transactions remain useful for sales analysis, but
+the identifier is excluded from customer segmentation. This demonstrated that data-cleaning decisions must depend on the analytical question.
+
+The statistical notebook improved my understanding of the difference between descriptive and inferential analysis. I learned to consider skewed
+distributions, unequal variances, p-values, effect size, assumptions, and practical significance. I also learned that a statistically significant result
+does not prove causation.
+
+Customer segmentation showed that model selection requires both statistical and business judgement. The two-cluster model produced the highest silhouette
+score, but four clusters offered more useful marketing groups. Documenting the lower four-cluster score taught me to communicate analytical trade-offs rather
+than presenting a model as objectively perfect.
+
+During application development, I adapted to Streamlit's rerun model, caching, multipage navigation, widgets, and responsive layouts. Problems such as missing notebook-rendering dependencies, nullable Boolean values in `np.select`, and overlapping Plotly charts improved my debugging skills. I learned to read error messages carefully, isolate one issue at a time, and verify the correction before continuing.
+
+Creating the dashboard also improved my understanding of analytical storytelling. Charts are accompanied by business questions, interpretations, warnings, and limitations. The campaign planner taught me to distinguish a transparent assumption-based scenario from a prediction.
+
+Git commits helped me divide the project into manageable features and retain a clear development history. Testing locally and on Heroku demonstrated that
+successful code execution is only one part of delivery; dependencies, documentation, deployment configuration, accessibility, and user feedback must
+also work together.
+
+AI tools supported explanations, debugging, documentation structure, and requirements checking. I reviewed and tested suggestions before using them.
+This reinforced the importance of treating AI output as guidance that still requires human judgement and validation.
+
+The project has prepared me to adapt to future analytics work by giving me practical experience with unfamiliar tools, analytical assumptions, machine
+learning, deployment, debugging, documentation, and communicating results to a non-technical audience.
+
+## Learning outcome mapping
+
+| Criterion | Project evidence |
+|---|---|
+| 1.1 | `03_Statistical_Analysis.ipynb` explains mean, median, variance, standard deviation, probability, distributions, hypothesis testing, p-values, and effect size |
+| 1.2 | `03_Statistical_Analysis.ipynb` applies descriptive statistics, empirical probabilities, Welch's t-test, Spearman correlation, and practical interpretation |
+| 1.3 | `04_Customer_Segmentation.ipynb` implements RFM feature engineering, scaling, K-Means clustering, inertia, and silhouette evaluation |
+| 2.1 | The repository separates raw data, processed data, notebooks, reusable source code, Streamlit pages, assets, requirements, testing documentation, and deployment configuration |
+| 2.2 | The Analytical methodology, statistical notebooks, and customer-segmentation notebook justify the selected methods and explain alternatives and trade-offs |
+| 3.1 | The ETL, EDA, statistical-analysis, and customer-segmentation notebooks apply appropriate methods to a real retail dataset |
+| 3.2 | Statistical assumptions, customer-ID limitations, model effectiveness, K-Means limitations, data limitations, and alternative approaches are evaluated |
+| 3.3 | The README Analytical methodology and notebook Objectives sections document the structured problem-solving plan |
+| 4.1 | Pandas, NumPy, SciPy, Scikit-learn, Plotly, Streamlit, Jupyter, Parquet, Git, GitHub, and Heroku are integrated across the project |
+| 4.2 | The Learning reflection evaluates challenges, adaptations, lessons learned, AI-assisted development, and preparation for future analytics work |
+
 ## Credits and references
 
 The following educational materials, datasets, libraries, documentation, and development tools supported the completion of this project.
@@ -1255,8 +1344,6 @@ and machine-learning methodology.
 information, and chart configuration.
 - [Streamlit documentation](https://docs.streamlit.io/) — multipage application structure, navigation, sidebar filters, metric components, caching, data
 tables, Plotly integration, and download controls.
-- [Matplotlib documentation](https://matplotlib.org/stable/) — supporting notebook visualisations and chart configuration.
-- [Seaborn documentation](https://seaborn.pydata.org/) — statistical visualisation guidance and supporting notebook charts.
 - [Project Jupyter documentation](https://docs.jupyter.org/en/latest/) — notebook creation, execution, markdown documentation, and analytical workflow.
 
 ### Statistical and machine-learning references
@@ -1306,8 +1393,6 @@ The practical implementation of these methods was supported by the official [Sci
   — guidance concerning readable content, keyboard accessibility, colour use, information hierarchy, and user interaction.
 - [Streamlit API reference](https://docs.streamlit.io/develop/api-reference)
   — accessible native controls, page layout, user feedback, and interactive application components.
-- [Plotly accessibility documentation](https://plotly.com/python/accessibility/)
-  — accessibility considerations for interactive charts.
 
 ### AI-assisted development resources
 
@@ -1345,5 +1430,4 @@ I would also like to acknowledge the assistance provided by **OpenAI Codex**, **
 valuable part of my learning process. They helped explain code, troubleshoot problems, improve the project's storytelling, organise the development process,
 keep track of the assessment requirements, and double-check that each project stage was functioning as expected.
 
-Finally, I would like to thank the developers and maintainers of Python, Pandas, NumPy, SciPy, Scikit-learn, Plotly, Streamlit, PyArrow, Matplotlib,
-Seaborn, Jupyter, Git, GitHub, and the wider open-source community. Their work provided the tools and documentation used to create this project.
+Finally, I would like to thank the developers and maintainers of Python, Pandas, NumPy, SciPy, Scikit-learn, Plotly, Streamlit, PyArrow, Jupyter, Git, GitHub, and the wider open-source community. Their work provided the tools and documentation used to create this project.
