@@ -591,6 +591,7 @@ The planner is explicitly described as an assumption-based scenario tool, not a 
 ├── Procfile
 ├── setup.sh
 └── README.md
+```
 
 ## UX design and accessibility
 
@@ -709,3 +710,345 @@ Clone the GitHub repository:
 
 ```bash
 git clone https://github.com/Ellusive89/CI-DA-Project-2-Online-Retail-Transaction-Analysis.git
+```
+
+## Testing
+
+Testing was performed throughout the project to confirm that the ETL pipeline, analytical notebooks, processed datasets, and Streamlit dashboard work as
+expected.
+
+### Automated validation
+
+#### Dependency validation
+
+The installed Python packages were checked with:
+
+```bash
+python -m pip check
+```
+
+**Result:**
+
+```bash
+No broken requirements found.
+```
+
+**Status: Pass**
+This confirms that the project environment does not contain missing or conflicting package dependencies.
+
+#### Python syntax validation
+
+The Streamlit application, dashboard pages, and reusable source modules were
+compiled with:
+
+```bash
+python -m compileall -q app.py pages src
+```
+
+The command completed without output or errors.
+
+**Status: Pass**
+
+No output from `compileall` indicates that all checked Python files contain valid Python syntax.
+
+#### Processed-data loading
+
+The principal Streamlit datasets were loaded directly through the reusable data-loading functions:
+
+```bash
+python -c "from src.data_loader import load_completed_sales, load_customer_segments; print(load_completed_sales().shape); print(load_customer_segments().shape)"
+```
+
+Result:
+
+```text
+(524878, 23)
+(4337, 7)
+```
+
+**Status: Pass**
+
+The completed-sales dataset contains 524,878 rows and 23 columns. The customer-segmentation dataset contains 4,337 customers and 7 columns.
+
+Warnings stating `No runtime found, using MemoryCacheStorageManager` may appear during this command because Streamlit caching functions are being called
+outside a running Streamlit application. These warnings do not indicate a data-loading failure.
+
+### ETL validation
+
+The ETL notebook contains assertions and comparison checks to confirm that:
+
+- the original raw DataFrame remains unchanged;
+- the supplied CSV remains available in its original format;
+- all expected source columns are present;
+- transaction dates are converted successfully;
+- exact duplicate rows are removed;
+- completed sales contain positive quantities and positive prices;
+- cancellation and adjustment rows are separated from completed sales;
+- missing descriptions are labelled consistently;
+- customer identifier `15287` is excluded from customer-level analysis;
+- exported datasets contain the same rows, columns, and revenue totals as their source DataFrames;
+- exported Parquet files can be loaded successfully.
+
+The raw dataset contained:
+
+- 541,909 rows;
+- 8 columns;
+- 5,268 exact duplicate rows;
+- 1,454 missing product descriptions.
+
+After transformation, the principal datasets contained:
+
+| Dataset | Rows | Columns |
+|---|---:|---:|
+| Clean transactions | 536,641 | 23 |
+| Completed sales | 524,878 | 23 |
+| Returns and adjustments | 11,763 | 23 |
+| Customer sales | 392,672 | 23 |
+| Customer segments | 4,337 | 7 |
+
+All ETL validation assertions completed successfully.
+
+**Status: Pass**
+
+### Notebook validation
+
+Each notebook was restarted and executed in sequence to confirm that its results can be reproduced.
+
+The intended notebook execution order is:
+
+1. `01_ETL_Data_Cleaning.ipynb`
+2. `02_Exploratory_Data_Analysis.ipynb`
+3. `03_Statistical_Analysis.ipynb`
+4. `04_Customer_Segmentation.ipynb`
+
+The notebooks were checked for:
+
+- successful data loading;
+- cells running without logic errors;
+- interactive Plotly visualisations rendering correctly;
+- statistical results matching the documented values;
+- hypothesis conclusions matching the calculated p-values;
+- customer-segment labels matching the cluster profiles;
+- processed datasets being exported to the correct folder;
+- markdown explanations being displayed beside the analytical results.
+
+**Status: Pass**
+
+### Manual Streamlit testing
+
+The application was started locally with:
+
+```bash
+python -m streamlit run app.py
+```
+
+The following functional tests verify the behaviour of the complete Streamlit application.
+
+| Feature | Test performed | Expected behaviour | Result |
+|---|---|---|---|
+| Application startup | Start Streamlit from the project root | Application opens without an exception | Pass |
+| Navigation | Open every page from the sidebar | Correct page opens and its emoji and label are visible | Pass |
+| Project Overview | Open the overview page | Business problem, audience, requirements, methodology, and limitations are explained |  Pass |
+| Sales date filter | Change the selected date range | Sales KPIs and charts update |  Pass |
+| Sales country filter | Select one or more countries | Results contain only the selected countries | Pass  |
+| Trend aggregation | Change the aggregation control | Revenue trend changes to the selected time interval |  Pass |
+| Product Analysis | Change the product filters | Product metrics and charts update |  Pass |
+| Market Analysis | Select different countries or markets | Geographic metrics and charts update |  Pass |
+| Cancellation Analysis | Change the available filters | Cancellation metrics and charts update |  Pass |
+| Customer Segmentation | Select a customer segment | Segment KPIs and visualisations update |  Pass |
+| Campaign Planner | Change campaign assumptions | Scenario values update immediately | Pass  |
+| Campaign explanation | Review campaign results | Page clearly states that results are scenarios, not forecasts |  Pass |
+| Empty results | Select filters with no matching records | Informative message appears instead of an exception |  Pass |
+| CSV download | Select a download button | A readable CSV file is downloaded |  Pass |
+| Plotly interaction | Hover over and zoom into a chart | Hover labels and Plotly controls work |  Pass |
+| Chart layout | Review every dashboard page | Charts, headings, descriptions, and tables do not overlap |  Pass |
+| Sidebar layout | Expand and collapse the sidebar | Sidebar remains usable and page content remains readable |  Pass |
+| Responsive layout | Reduce the browser width | Content remains readable without major overlap |  Pass |
+| External links | Select an external link | Correct resource opens in a separate browser tab |  Pass |
+
+### Page-by-page testing
+
+#### Project Overview page
+
+| Test | Expected behaviour | Result |
+|---|---|---|
+| Open the page | Page loads without an exception |  Pass |
+| Review the page introduction | Project purpose and target audience are immediately understandable | Pass  |
+| Review business requirements | Business requirements are clearly listed | Pass  |
+| Review methodology | ETL, EDA, statistics, machine learning, and dashboard stages are explained |  Pass |
+| Review navigation | User can select another dashboard page from the sidebar | Pass  |
+
+#### Sales Overview page
+
+| Test | Expected behaviour | Result |
+|---|---|---|
+| Open the page | Sales KPIs and charts load without an exception | Pass  |
+| Change date range | Revenue, invoices, invoice value, and units sold update | Pass  |
+| Select one country | KPIs and charts display only the selected country | Pass  |
+| Select multiple countries | Selected countries are combined correctly |  Pass |
+| Clear the country selection | Dashboard returns to all available countries | Pass  |
+| Change trend aggregation | Trend chart updates to the selected interval | Pass  |
+| Hover over the revenue chart | Period and revenue details are displayed | Pass  |
+| Review invoice distribution | Histogram remains readable and does not overlap other content | Pass  |
+| Download trend data | CSV contains the displayed trend information | Pass  |
+
+#### Product Analysis page
+
+| Test | Expected behaviour | Result |
+|---|---|---|
+| Open the page | Product KPIs and charts load | Pass  |
+| Change the date range | Product results update | Pass  |
+| Change the number of displayed products | Product ranking chart shows the selected number of products | Pass  |
+| Review revenue ranking | Highest-revenue products are shown correctly | Pass  |
+| Review quantity ranking | Highest-volume products are shown correctly | Pass  |
+| Hover over product charts | Product details appear in the tooltip | Pass  |
+| Apply narrow filters | Dashboard remains readable when only a small number of products remain | Pass  |
+| Download product data | A readable CSV file is downloaded | Pass  |
+
+#### Market Analysis page
+
+| Test | Expected behaviour | Result |
+|---|---|---|
+| Open the page | Geographic metrics, charts, and map load |  Pass |
+| Change the date range | Market results update | Pass  |
+| Select a country | Country-specific values are displayed | Pass  |
+| Select several countries | Results include only the selected markets | Pass  |
+| Review country-name replacements | EIRE, RSA, and USA appear as readable geographic names | Pass  |
+| Hover over the map | Country revenue information appears | Pass  |
+| Review market ranking | Countries are ordered using the selected metric | Pass  |
+| Download market data | A readable CSV file is downloaded | Pass  |
+
+#### Cancellation Analysis page
+
+| Test | Expected behaviour | Result |
+|---|---|---|
+| Open the page | Cancellation KPIs and charts load | Pass  |
+| Change the date range | Cancellation results update | Pass  |
+| Select a country | Results contain only the selected country | Pass  |
+| Review cancellation value | Value is clearly identified as potentially lost or returned value | Pass  |
+| Review cancellation trend | Trend chart updates with the selected filters | Pass  |
+| Review affected products | Products associated with the highest cancellation values are shown | Pass  |
+| Apply filters with few results | Page remains readable and provides appropriate feedback | Pass  |
+| Download cancellation data | A readable CSV file is downloaded | Pass  |
+
+#### Customer Segmentation page
+
+| Test | Expected behaviour | Result |
+|---|---|---|
+| Open the page | Customer-segment KPIs and charts load |  Pass |
+| Select a segment | Metrics and charts update to the selected segment |  Pass |
+| Select all segments | Complete segmentation summary returns | Pass  |
+| Review segment profiles | Recency, frequency, monetary value, and revenue contribution are understandable | Pass  |
+| Review segment sizes | Customer counts match the segmentation dataset | Pass  |
+| Hover over charts | Segment information is displayed | Pass  |
+| Review model explanation | K-Means choice and limitations are clearly explained | Pass  |
+| Download segment data | A readable CSV file is downloaded | Pass  |
+
+#### Marketing Campaign Planner page
+
+| Test | Expected behaviour | Result |
+|---|---|---|
+| Open the page | Campaign controls and scenario results load | Pass  |
+| Select a customer segment | Audience and historical values update | Pass  |
+| Change contact percentage | Number of targeted customers updates | Pass  |
+| Change response-rate assumption | Estimated responding customers update | Pass  |
+| Change average-order assumption | Scenario revenue updates | Pass  |
+| Change campaign cost | Estimated campaign return updates | Pass  |
+| Enter a zero value | Application handles the value without an exception | Pass  |
+| Review explanation | Results are clearly described as scenarios rather than predictions | Pass  |
+| Download scenario data | A readable CSV file is downloaded | Pass  |
+
+### Filter boundary testing
+
+| Test | Expected behaviour | Result |
+|---|---|---|
+| Select the earliest available date | Data for the beginning of the dataset is displayed | Pass  |
+| Select the latest available date | Data for the end of the dataset is displayed | Pass  |
+| Select the complete date range | Complete-dataset results are restored | Pass  |
+| Select a single-day range | Dashboard handles the narrow range without an exception | Pass  |
+| Select a small country | Dashboard handles a limited number of records | Pass  |
+| Select multiple countries | Values are aggregated across the selected countries | Pass  |
+| Clear an optional selection | Dashboard returns to its default state | Pass  |
+| Create an empty selection | Helpful feedback appears instead of a broken chart | Pass  |
+
+### Data download testing
+
+| Test | Expected behaviour | Result |
+|---|---|---|
+| Download a CSV file | Browser starts the download | Pass  |
+| Open downloaded CSV | File opens successfully in a spreadsheet application or text editor | Pass  |
+| Review CSV headers | Column names are understandable | Pass  |
+| Compare downloaded rows with filters | Downloaded data represents the current filtered selection | Pass  |
+| Download after changing filters | Newly downloaded file reflects the new selection | Pass  |
+
+### Visual and responsive testing
+
+| Test | Expected behaviour | Result |
+|---|---|---|
+| Review application at normal desktop width | Information hierarchy is clear | Pass  |
+| Collapse the sidebar | Main content expands correctly | Pass  |
+| Expand the sidebar | Navigation and filters remain readable | Pass  |
+| Reduce browser width | Dashboard reorganises without major overlap | Pass  |
+| Review long product names | Labels remain understandable through truncation or hover information | Pass  |
+| Review charts with one data point | Chart remains readable and does not cover following content | Pass  |
+| Review charts with many data points | Chart remains interactive and readable | Pass  |
+| Review metric cards | Labels and values do not overlap | Pass  |
+| Review help text | Explanations remain close to the associated chart or control | Pass  |
+
+### Accessibility testing
+
+| Test | Expected behaviour | Result |
+|---|---|---|
+| Navigate with the keyboard | Native Streamlit controls can receive keyboard focus | Pass  |
+| Review chart labels | Charts contain titles and labelled axes where appropriate | Pass  |
+| Review filter labels | Every filter has a descriptive label | Pass  |
+| Review colour use | Important information is also available through labels, values, or hover text | Pass  |
+| Review text contrast | Text is readable against its background | Pass  |
+| Review page headings | Headings follow a clear information hierarchy | Pass  |
+| Review dynamic feedback | User receives an explanation when selections change or contain no results | Pass  |
+| Check autoplay behaviour | No audio, video, flashing, or autoplay content is present | Pass  |
+
+### Browser testing
+
+The deployed application should be checked using the browsers and screen sizes available to the developer.
+
+| Browser or view | Expected behaviour | Result |
+|---|---|---|
+| Google Chrome | Application pages, filters, charts, and downloads work | Pass  |
+| Safari | Application pages, filters, charts, and downloads work | Pass  |
+| Desktop-width browser | Full dashboard layout is readable | Pass  |
+| Narrow browser window | Content remains readable and navigable | Pass  |
+
+### Known warnings
+
+#### Plotly FutureWarning
+
+Plotly may display a `FutureWarning` relating to `DatetimeProperties.to_pydatetime`.
+
+This warning originates from the interaction between the installed Plotly and Pandas versions. It does not prevent the charts from rendering and does not
+change the analytical results.
+
+#### Streamlit cache warning
+
+A `No runtime found, using MemoryCacheStorageManager` warning can appear when cached data-loading functions are executed directly with a terminal Python
+command.
+
+The warning does not appear because of corrupted data. It occurs because the function is being tested outside the normal Streamlit runtime.
+
+### Defects identified and resolved
+
+| Defect | Cause | Resolution |
+|---|---|---|
+| Plotly figure did not render in a notebook | `nbformat` was not installed in the environment | Added and installed the required notebook-rendering dependency |
+| Transaction classification raised an `np.select` TypeError | Conditions used Pandas nullable Boolean values instead of standard Boolean arrays | Converted the classification conditions to valid Boolean arrays |
+| Dashboard content overlapped | Chart and container dimensions did not provide sufficient vertical spacing | Adjusted chart layout, height, margins, and Streamlit containers |
+| Customer identifier produced misleading customer results | Identifier `15287` represented an unusually large collection of transactions across multiple countries | Retained it for general sales analysis but excluded it from customer-level segmentation |
+| XGBoost dependency check failed on the local platform | The installed XGBoost build was unsupported on the platform and was not required by the selected model | Removed the unnecessary dependency and used Scikit-learn K-Means clustering |
+| Raw and processed data could be confused | Analysis originally depended on transformations applied during the notebook session | Preserved `df_raw`, created separate analytical DataFrames, and exported purpose-specific processed datasets |
+
+### Testing conclusion
+
+The automated checks confirm that the project dependencies, Python syntax, data loaders, processed datasets, and ETL assertions operate successfully.
+
+Manual testing is used to verify the interactive filters, dashboard pages, charts, scenario controls, downloads, navigation, responsive layout, browser
+compatibility, and user feedback.
