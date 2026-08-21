@@ -599,7 +599,10 @@ The planner is explicitly described as an assumption-based scenario tool, not a 
 │   └── 04_Customer_Segmentation.ipynb
 ├── .streamlit/
 │   └── config.toml
+├── .python-version
+├── .slugignore
 ├── requirements.txt
+├── requirements-dev.txt
 ├── Procfile
 ├── setup.sh
 └── README.md
