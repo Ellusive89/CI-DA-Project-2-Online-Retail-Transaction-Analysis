@@ -24,6 +24,10 @@ The application helps retail decision-makers identify valuable customer groups, 
 - [Machine learning](#machine-learning)
 - [Streamlit dashboard](#streamlit-dashboard)
 - [Project structure](#project-structure)
+- [UX design and accessibility](#ux-design-and-accessibility)
+- [Technologies used](#technologies-used)
+- [Local installation](#local-installation)
+- [Testing](#testing)
 
 ## Business problem
 
@@ -554,6 +558,16 @@ The planner is explicitly described as an assumption-based scenario tool, not a 
 │   ├── 4_Cancellation_Analysis.py
 │   ├── 5_Customer_Segmentation.py
 │   └── 6_Marketing_Campaign_Planner.py
+├── assets/
+│   └── images/
+│       ├── cancellation-product-values.png
+│       ├── cluster-silhouette-scores.png
+│       ├── customer-segment-shares.png
+│       ├── geographic-revenue-map.png
+│       ├── invoice-value-distribution.png
+│       ├── monthly-sales-revenue.png
+│       ├── price-units-relationship.png
+│       └── top-products-revenue.png
 ├── src/
 │   ├── __init__.py
 │   └── data_loader.py
@@ -577,3 +591,121 @@ The planner is explicitly described as an assumption-based scenario tool, not a 
 ├── Procfile
 ├── setup.sh
 └── README.md
+
+## UX design and accessibility
+
+The Streamlit dashboard is intended for retail managers, marketing teams, sales analysts, and other business users who need to explore sales performance
+without working directly with Python code.
+
+### Information hierarchy
+
+The application presents information from general to specific:
+
+1. The Project Overview introduces the business problem and analytical goals.
+2. Sales Overview presents the principal performance indicators and sales trends.
+3. Product and Market Analysis identify important products and geographic markets.
+4. Cancellation Analysis investigates potentially lost revenue.
+5. Customer Segmentation explains the machine-learning results.
+6. Marketing Campaign Planner converts the analytical findings into an interactive business scenario.
+
+Each dashboard page begins with a clear title and short explanation. Summary metrics are displayed before detailed charts so that users can understand the
+most important results first.
+
+### User control
+
+Users control the analysis through Streamlit widgets, including:
+
+- date-range filters;
+- country and market filters;
+- product selection;
+- customer-segment selection;
+- chart aggregation controls;
+- marketing campaign assumptions;
+- CSV download buttons.
+
+Charts and metrics update when the selected filters change. The application does not use automatic pop-ups, audio, video, or other interactions that could
+interrupt the user.
+
+### Consistency
+
+The dashboard uses consistent:
+
+- page titles and introductory descriptions;
+- sidebar navigation;
+- filter placement;
+- KPI formatting;
+- Plotly chart styling;
+- currency and percentage formatting;
+- explanatory messages and chart captions.
+
+The same terminology is used throughout the notebooks, processed datasets, README, and Streamlit application.
+
+### Confirmation and feedback
+
+The application provides feedback by:
+
+- describing the currently selected reporting period;
+- displaying the number of filtered records or customers;
+- updating KPIs immediately after a filter changes;
+- showing informative messages when a selection contains insufficient data;
+- clearly labelling downloadable data;
+- distinguishing calculated campaign scenarios from predictions.
+
+### Accessibility
+
+Accessibility was considered through:
+
+- descriptive page, chart, axis, filter, and button labels;
+- readable font sizes and chart heights;
+- colour choices with visible contrast;
+- information presented through text and values as well as colour;
+- explanatory text accompanying visualisations;
+- native Streamlit controls that support keyboard interaction;
+- avoidance of flashing, autoplay, and time-limited content;
+- responsive dashboard layouts that adapt to different screen widths.
+
+Some Plotly charts use colour to help distinguish categories. Labels, hover information, and supporting text are also provided so that colour is not the
+only way information is communicated.
+
+## Technologies used
+
+### Programming and analysis
+
+- **Python** — principal programming language.
+- **Pandas** — data loading, cleaning, transformation, aggregation, and analysis.
+- **NumPy** — numerical calculations and feature creation.
+- **SciPy** — statistical hypothesis testing.
+- **Scikit-learn** — preprocessing, K-Means clustering, and model evaluation.
+- **PyArrow** — storage and retrieval of processed Parquet datasets.
+- **Jupyter Notebook** — documented ETL, exploratory analysis, statistics, and machine-learning workflows.
+
+### Visualisation and application
+
+- **Plotly** — interactive charts with zoom, hover, selection, and export controls.
+- **Matplotlib and Seaborn** — supporting notebook visualisations.
+- **Streamlit** — interactive multipage business dashboard.
+- **HTML and Markdown** — application and project documentation.
+
+### Development and deployment
+
+- **Visual Studio Code** — project development environment.
+- **Git** — version control.
+- **GitHub** — remote repository and project hosting.
+- **Heroku** — planned deployment platform.
+
+## Local installation
+
+Follow these instructions to run the project locally.
+
+### Requirements
+
+- Python 3.12
+- Git
+- A terminal or command-line application
+
+### Installation
+
+Clone the GitHub repository:
+
+```bash
+git clone https://github.com/Ellusive89/CI-DA-Project-2-Online-Retail-Transaction-Analysis.git
