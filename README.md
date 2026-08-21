@@ -124,38 +124,24 @@ The analysis:
 
 The project follows a structured data analytics workflow:
 
-1. **Business understanding:** define the retail questions, users, objectives,
-   limitations, and required outputs.
-2. **Data extraction:** load the supplied raw CSV without altering its original
-   contents.
-3. **Data transformation:** inspect quality, remove exact duplicates, label
-   missing descriptions, classify transaction types, and create analytical
-   features.
+1. **Business understanding:** define the retail questions, users, objectives, limitations, and required outputs.
+2. **Data extraction:** load the supplied raw CSV without altering its original contents.
+3. **Data transformation:** inspect quality, remove exact duplicates, label missing descriptions, classify transaction types, and create analytical features.
 4. **Data loading:** export validated purpose-specific Parquet datasets.
-5. **Exploratory data analysis:** analyse sales, products, time periods,
-   geographic markets, cancellations, and invoice values.
-6. **Statistical analysis:** apply descriptive statistics, empirical
-   probability, hypothesis testing, correlation, and effect-size measurement.
-7. **Machine learning:** create RFM customer features and apply K-Means
-   clustering.
-8. **Application development:** communicate results through a multipage
-   Streamlit dashboard with interactive Plotly visualisations.
+5. **Exploratory data analysis:** analyse sales, products, time periods, geographic markets, cancellations, and invoice values.
+6. **Statistical analysis:** apply descriptive statistics, empirical probability, hypothesis testing, correlation, and effect-size measurement.
+7. **Machine learning:** create RFM customer features and apply K-Means clustering.
+8. **Application development:** communicate results through a multipage Streamlit dashboard with interactive Plotly visualisations.
 9. **Decision support:** provide an assumption-based marketing campaign planner.
-10. **Evaluation:** explain model performance, analytical limitations, and
-    appropriate use of the results.
+10. **Evaluation:** explain model performance, analytical limitations, and appropriate use of the results.
 
-Completed sales are analysed separately from cancellations and operational
-adjustments. Customer-level analysis uses only identifiers considered reliable.
+Completed sales are analysed separately from cancellations and operational adjustments. Customer-level analysis uses only identifiers considered reliable.
 
-The project uses both descriptive and inferential methods. Descriptive methods
-summarise the historical dataset, while hypothesis tests assess whether observed
-relationships are unlikely under specified null hypotheses. Neither method
-automatically demonstrates causation.
+The project uses both descriptive and inferential methods. Descriptive methods summarise the historical dataset, while hypothesis tests assess whether observed relationships are unlikely under specified null hypotheses. Neither method automatically demonstrates causation.
 
 ## ETL pipeline
 
-The ETL pipeline is documented in
-`jupyter_notebooks/01_ETL_Data_Cleaning.ipynb`.
+The ETL pipeline is documented in `jupyter_notebooks/01_ETL_Data_Cleaning.ipynb`.
 
 ### Extract
 
@@ -165,8 +151,7 @@ The original CSV is loaded into `df_raw`. It contains:
 - 8 original columns;
 - transactions between December 2010 and December 2011.
 
-The raw DataFrame remains available for comparison throughout the notebook. All
-cleaning and feature engineering are performed on a separate copy.
+The raw DataFrame remains available for comparison throughout the notebook. All cleaning and feature engineering are performed on a separate copy.
 
 ### Transform
 
@@ -197,23 +182,17 @@ The transformed transactions are separated into:
 | Zero-price transaction | 1,174 |
 | Accounting adjustment | 2 |
 
-Negative-quantity rows with zero prices are retained as operational adjustments
-rather than automatically described as monetary customer returns.
+Negative-quantity rows with zero prices are retained as operational adjustments rather than automatically described as monetary customer returns.
 
 ### Customer identifier limitation
 
-Customer identifier `15287` occurs 135,101 times, representing approximately
-24.93% of the raw dataset. It appears across thousands of invoices, several
-countries, and thousands of products. It is also equal to the dataset's median
-customer identifier.
+Customer identifier `15287` occurs 135,101 times, representing approximately 24.93% of the raw dataset. It appears across thousands of invoices, several
+countries, and thousands of products. It is also equal to the dataset's median customer identifier.
 
-This pattern suggests that the supplied CSV may use `15287` as a replacement
-for transactions where the original customer identifier was unknown.
+This pattern suggests that the supplied CSV may use `15287` as a replacement for transactions where the original customer identifier was unknown.
 
-The associated valid transactions remain included in sales, product, time, and
-geographic analysis. Identifier `15287` is excluded from RFM segmentation
-because treating it as one real customer would severely distort customer-level
-results.
+The associated valid transactions remain included in sales, product, time, and geographic analysis. Identifier `15287` is excluded from RFM segmentation
+because treating it as one real customer would severely distort customer-level results.
 
 ### Load
 
@@ -226,13 +205,11 @@ The ETL notebook exports four validated Parquet datasets:
 | `returns_adjustments.parquet` | Cancellations and operational adjustments | 11,763 |
 | `customer_sales.parquet` | Reliable customer-level completed sales | 392,672 |
 
-Parquet preserves data types and reduces application loading time. The original
-raw CSV remains unchanged and committed separately.
+Parquet preserves data types and reduces application loading time. The original raw CSV remains unchanged and committed separately.
 
 ## Key analysis findings
 
-The exploratory analysis is documented in
-`jupyter_notebooks/02_Exploratory_Data_Analysis.ipynb`.
+The exploratory analysis is documented in `jupyter_notebooks/02_Exploratory_Data_Analysis.ipynb`.
 
 ### Sales performance
 
@@ -248,51 +225,74 @@ The completed-sales dataset generated:
 | Unique products | 3,922 |
 | Countries represented | 38 |
 
-The mean invoice value is considerably higher than the median, demonstrating a
-strongly right-skewed distribution. A relatively small number of large invoices
-increase the mean.
+#### Invoice-value distribution
 
-November 2011 was the highest-revenue complete month, generating approximately
-£1.50 million. February 2011 was the lowest complete month.
+<img
+  src="assets/images/invoice-value-distribution.png"
+  alt="Histogram showing the right-skewed distribution of completed invoice values"
+  width="900">
 
-December 2011 is incomplete because the dataset ends on 9 December. It is not
-compared directly with complete months.
+*Figure 1: Distribution of completed invoice values up to the 99th percentile.*
+
+The distribution is strongly right-skewed. Most invoices are concentrated at lower values, while a relatively small number of large transactions extend the
+upper tail. This explains why the mean invoice value of £533.17 is considerably higher than the median of £303.30. The 99th-percentile limit improves
+readability without removing invoices from the KPI calculations.
+
+#### Monthly completed-sales revenue
+
+<img
+  src="assets/images/monthly-sales-revenue.png"
+  alt="Interactive line chart showing monthly completed-sales revenue from December 2010 to December 2011"
+  width="900">
+
+*Figure 2: Monthly completed-sales revenue.*
+
+Revenue strengthened during September, October, and November 2011. November was the strongest complete month, generating approximately £1.50 million. December
+2011 must not be interpreted as a full-month decline because the dataset ends on 9 December.
 
 ### Product performance
 
-`REGENCY CAKESTAND 3 TIER` generated the highest merchandise revenue.
+#### Top merchandise products by revenue
 
-`PAPER CRAFT, LITTLE BIRDIE` recorded exceptionally high unit sales and revenue,
-but those sales occurred in only one completed invoice. It is therefore treated
-as an exceptional bulk transaction rather than evidence of broad popularity.
+<img
+  src="assets/images/top-products-revenue.png"
+  alt="Horizontal bar chart ranking the ten highest-revenue merchandise products"
+  width="900">
 
-`WHITE HANGING HEART T-LIGHT HOLDER` and `JUMBO BAG RED RETROSPOT` performed
-strongly across revenue, units, and invoice reach. Invoice reach is used
-alongside unit sales to distinguish widespread demand from isolated bulk
-purchases.
+*Figure 3: Highest-revenue merchandise products.*
 
-Administrative codes such as postage, fees, manual entries, discounts, and
-accounting adjustments remain included in overall financial totals but are
-excluded from merchandise-product rankings.
+`REGENCY CAKESTAND 3 TIER` leads merchandise revenue.
+`PAPER CRAFT, LITTLE BIRDIE` also records very high revenue, but its completed sales occur in only one invoice. Invoice reach is therefore considered alongside revenue and units sold so that isolated bulk transactions are not automatically described as widespread product popularity.
 
 ### Geographic performance
 
-The United Kingdom generated approximately 84.59% of completed-sales revenue,
-making it the retailer's dominant market and indicating substantial geographic
-concentration.
+#### Geographic distribution of completed-sales revenue
 
-The Netherlands and EIRE were the largest international markets by revenue.
-The Netherlands and Australia had high average invoice values but relatively
-few reliable customers, suggesting possible wholesale concentration.
+<img
+  src="assets/images/geographic-revenue-map.png"
+  alt="World choropleth map showing completed-sales revenue by customer country"
+  width="900">
 
-Germany and France had broader invoice and customer activity and may provide
-more diversified international marketing opportunities.
+*Figure 4: Geographic distribution of completed-sales revenue.*
 
-These results do not show that location causes customer behaviour. Country may
-be associated with wholesale activity, product mix, shipping arrangements, or
-other unobserved factors.
+The map makes the retailer's dependence on the United Kingdom immediately visible. The UK generated approximately 84.59% of completed-sales revenue.
+International revenue exists across several markets, but its distribution is much smaller and sometimes concentrated among a limited number of customers or
+bulk invoices.
 
 ### Cancellations and adjustments
+
+#### Products with the highest cancellation value
+
+<img
+  src="assets/images/cancellation-product-values.png"
+  alt="Horizontal bar chart showing merchandise products with the highest recorded cancellation values"
+  width="900">
+
+*Figure 5: Merchandise products with the highest cancellation values.*
+
+`PAPER CRAFT, LITTLE BIRDIE` has the highest cancellation value, but the result comes from one cancellation invoice corresponding with the exceptional bulk
+order identified in completed sales. It should not be interpreted as evidence of widespread customer dissatisfaction. The dataset does not provide
+cancellation-reason fields.
 
 The data contains:
 
@@ -301,21 +301,12 @@ The data contains:
 - 275,560 cancelled units;
 - £893,979.73 in recorded cancellation value.
 
-The recorded cancellation value is approximately 8.40% of completed-sales
-revenue. This is a comparison of transaction values, not a formal refund rate or
+The recorded cancellation value is approximately 8.40% of completed-sales revenue. This is a comparison of transaction values, not a formal refund rate or
 confirmed financial loss.
-
-`PAPER CRAFT, LITTLE BIRDIE` has the highest cancellation value, but it is
-associated with one cancellation invoice. This corresponds with the exceptional
-bulk order found in the completed-sales analysis.
-
-The dataset does not contain cancellation-reason or return-reason fields, so the
-underlying causes cannot be confirmed.
 
 ## Hypothesis testing
 
-Statistical principles and hypothesis tests are documented in
-`jupyter_notebooks/03_Statistical_Analysis.ipynb`.
+Statistical principles and hypothesis tests are documented in `jupyter_notebooks/03_Statistical_Analysis.ipynb`.
 
 The notebook explains and applies:
 
@@ -335,14 +326,11 @@ A significance level of 0.05 is used.
 
 ### Hypothesis 1: UK and international invoice values
 
-**H0:** The mean log-transformed invoice value is equal for United Kingdom and
-international invoices.
+**H0:** The mean log-transformed invoice value is equal for United Kingdom and international invoices.
 
-**H1:** The mean log-transformed invoice value differs between United Kingdom
-and international invoices.
+**H1:** The mean log-transformed invoice value differs between United Kingdom and international invoices.
 
-A Welch independent-samples t-test is used because the groups have unequal
-sample sizes and equal variances cannot be assumed. Invoice values are
+A Welch independent-samples t-test is used because the groups have unequal sample sizes and equal variances cannot be assumed. Invoice values are
 log-transformed to reduce right skew.
 
 Results:
@@ -357,24 +345,19 @@ Results:
 | p-value | approximately 4.29 × 10⁻⁷⁴ |
 | Cohen's d | approximately 0.435 |
 
-The null hypothesis is rejected. There is strong evidence that transformed
-invoice values differ between the two markets. Cohen's d indicates a
+The null hypothesis is rejected. There is strong evidence that transformed invoice values differ between the two markets. Cohen's d indicates a
 small-to-moderate standardised difference.
 
-The result does not demonstrate that international location causes higher order
-values. Wholesale customers, product combinations, or bulk purchasing may
+The result does not demonstrate that international location causes higher order values. Wholesale customers, product combinations, or bulk purchasing may
 explain part of the difference.
 
 ### Hypothesis 2: Product price and units sold
 
-**H0:** There is no negative monotonic association between realised average unit
-price and units sold.
+**H0:** There is no negative monotonic association between realised average unit price and units sold.
 
-**H1:** There is a negative monotonic association between realised average unit
-price and units sold.
+**H1:** There is a negative monotonic association between realised average unit price and units sold.
 
-Spearman rank correlation is used because price and unit-sales data are strongly
-skewed and the relationship does not need to be linear.
+Spearman rank correlation is used because price and unit-sales data are strongly skewed and the relationship does not need to be linear.
 
 Results:
 
@@ -383,13 +366,18 @@ Results:
 | Spearman correlation | approximately -0.379 |
 | p-value | approximately 5.01 × 10⁻¹³⁴ |
 
-The null hypothesis is rejected. The analysis finds a statistically significant,
-moderate negative association between realised average unit price and units
-sold.
+#### Price and sales-volume relationship
 
-This association does not estimate causal price elasticity. Product type,
-seasonality, availability, wholesale purchasing, and promotions may influence
-both observed price and sales volume.
+<img
+  src="assets/images/price-units-relationship.png"
+  alt="Logarithmic scatter plot comparing realised average product price with units sold"
+  width="900">
+
+*Figure 6: Realised average unit price compared with product sales volume.*
+
+The chart supports the Spearman result of approximately -0.379: higher-priced products tend to have lower unit volumes. The relationship is moderate rather
+than deterministic, and substantial variation remains. Product type, seasonality, promotions, availability, and wholesale purchasing may affect both
+variables, so the chart does not demonstrate causal price elasticity.
 
 ## Machine learning
 
@@ -398,8 +386,7 @@ Customer segmentation is documented in
 
 ### Problem definition
 
-The dataset does not contain existing customer-segment labels. Customer
-segmentation is therefore treated as an unsupervised machine-learning problem.
+The dataset does not contain existing customer-segment labels. Customer segmentation is therefore treated as an unsupervised machine-learning problem.
 
 RFM features are created for 4,337 reliable customer identifiers:
 
@@ -411,6 +398,19 @@ The analysis date is set to one day after the final recorded transaction.
 
 ### Model selection
 
+#### Silhouette-score comparison
+
+<img
+  src="assets/images/cluster-silhouette-scores.png"
+  alt="Line chart comparing silhouette scores for K-Means models containing two to eight clusters"
+  width="900">
+
+*Figure 7: Silhouette scores for candidate K-Means models.*
+
+The two-cluster model has the highest silhouette score of approximately 0.433. The selected four-cluster model has a lower score of approximately 0.333.
+Four clusters were retained because they provide more detailed and actionable marketing groups, while the reduced statistical separation is documented as a
+model limitation.
+
 K-Means was selected because it:
 
 - supports numeric behavioural features;
@@ -418,18 +418,9 @@ K-Means was selected because it:
 - can be explained to non-technical users;
 - integrates with Scikit-learn and Streamlit.
 
-RFM features are transformed using `log1p` to reduce skew and standardised using
-`StandardScaler`.
+RFM features are transformed using `log1p` to reduce skew and standardised using `StandardScaler`.
 
-Models containing between two and eight clusters are compared using inertia,
-silhouette score, interpretability, and business usefulness.
-
-The two-cluster model produced the highest silhouette score of approximately
-0.433. A four-cluster model was selected despite its lower score of approximately
-0.333 because it provides more actionable marketing detail.
-
-This trade-off is documented rather than presenting the four-cluster solution as
-the statistically strongest option.
+Models containing between two and eight clusters are compared using inertia, silhouette score, interpretability, and business usefulness.
 
 ### Customer segments
 
@@ -440,35 +431,37 @@ the statistically strongest option.
 | Recent Low-Frequency | 893 | 20.59% | 4.89% |
 | Inactive Low-Value | 1,558 | 35.92% | 6.35% |
 
-The High-Value Loyal segment represents a relatively small proportion of
-customers but generates most customer-attributed revenue. This makes retention
-and monitoring especially important.
+#### Customer share and revenue contribution
 
-The segmentation is exported to
-`data/processed/customer_segments.parquet` for use in Streamlit.
+<img
+  src="assets/images/customer-segment-shares.png"
+  alt="Grouped bar chart comparing customer share and revenue share across four RFM segments"
+  width="900">
+
+*Figure 8: Customer and revenue share by RFM segment.*
+
+The High-Value Loyal segment contains approximately 16.39% of reliable customers but generates about 64.53% of customer-attributed revenue. In
+contrast, the Inactive Low-Value segment is the largest by customer count but contributes only about 6.35% of revenue. This supports different marketing
+objectives for retention, development, second-purchase activity, and controlled reactivation.
+
+The segmentation is exported to `data/processed/customer_segments.parquet` for use in Streamlit.
 
 ### Model limitations
 
-K-Means favours compact and approximately spherical clusters. Results depend on
-the selected features, transformation, scaling, model initialisation, and
+K-Means favours compact and approximately spherical clusters. Results depend on the selected features, transformation, scaling, model initialisation, and
 analysis date.
 
-The moderate silhouette score indicates useful but overlapping customer groups.
-Segment membership should be recalculated when substantial new transaction data
-becomes available.
+The moderate silhouette score indicates useful but overlapping customer groups. Segment membership should be recalculated when substantial new transaction data becomes available.
 
-The model does not contain demographics, campaign response, profitability, or
-customer-preference data.
+The model does not contain demographics, campaign response, profitability, or customer-preference data.
 
 ## Streamlit dashboard
 
-The project provides a multipage Streamlit application with explicit labelled
-navigation.
+The project provides a multipage Streamlit application with explicit labelled navigation.
 
 ### 🏠 Project Overview
 
-Introduces the purpose, audience, business questions, workflow, headline KPIs,
-and principal data limitations.
+Introduces the purpose, audience, business questions, workflow, headline KPIs, and principal data limitations.
 
 ### 📈 Sales Overview
 
@@ -506,8 +499,7 @@ Provides:
 - average-invoice-value comparisons;
 - downloadable country results.
 
-A temporary `MapCountry` field converts dataset labels such as `EIRE`, `RSA`,
-and `USA` into names recognised reliably by Plotly. The original country values
+A temporary `MapCountry` field converts dataset labels such as `EIRE`, `RSA`, and `USA` into names recognised reliably by Plotly. The original country values
 remain unchanged.
 
 ### ↩️ Cancellation Analysis
@@ -547,9 +539,7 @@ The prototype converts user-supplied assumptions into estimated:
 - return on investment;
 - break-even conversion rate.
 
-The planner is explicitly described as an assumption-based scenario tool, not a
-prediction. The dataset does not contain historical campaign response, marketing
-cost, or profit-margin data.
+The planner is explicitly described as an assumption-based scenario tool, not a prediction. The dataset does not contain historical campaign response, marketing cost, or profit-margin data.
 
 ## Project structure
 
